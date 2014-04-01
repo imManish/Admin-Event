@@ -28,27 +28,44 @@
 <!-- CHANGE THEAM CSS -->
 <link href="assets/css/changetheam.css" rel="stylesheet" type="text/css"/>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-   <script type="text/javascript">
-  var base_url="http://192.168.1.242/Events_Management/public/index.php/api/exa/";
+<script type="text/javascript">
+  var base_url="http://192.168.1.222/Event-Management/public/index.php/api/exa/";
    
     function attebdeedelete(ID){
 	var id = ID;
 	
 	var confirmDelete= confirm('Do you really want to delete this Employee?');
 	if (confirmDelete==true){
-
 	  jQuery.post(base_url+'attendee/'+id+'/delete',function(data)
 	  { 
-	    alert(success);
 	  });
+	  $("#row-"+id).fadeOut();
 	}else{
 	  alert('Operation Canceled');
 	  }
+	  
+	  
 	}
-
+//  function attendeeedit(ID){
+//	var id = ID;
+//	pdata='edit='+id+'&action=post_edit';
+//	$.ajax({
+//	    type	:	'POST',
+//	    url		:	'attendee_edit.php',
+//	    data	:	pdata,
+//	    dataType    :       "json",
+//	    success:		function(data){
+//	    var val = JSON.stringify(data);
+//	    var newArray = JSON.parse(val);
+//	   		
+//	     }
+//	    
+//	    });
+//
+//	  }
    </script>
 </head>
-<!-- END HEAD -->
+
 <!-- BEGIN BODY -->
 <body class="">
 <!-- BEGIN HEADER -->
@@ -95,8 +112,7 @@
       <div class="pull-right"> 
 		<div class="chat-toggler">	
 				<a href="#" class="dropdown-toggle" id="my-task-list" data-placement="bottom" 
-						   data-content='
-						<div style="width:300px" class="scroller" data-height="100px">
+						   data-content='<div style="width:300px" class="scroller" data-height="100px">
 						  <div class="notification-messages info">
 									<div class="user-profile">
 										<img src="assets/img/profiles/d.jpg" data-src="assets/img/profiles/d.jpg" data-src-retina="assets/img/profiles/d2x.jpg" width="35" height="35">
@@ -338,13 +354,11 @@
             <div class="grid-body addPD">
             <div class="row-fluid">
             <a id="chat-menu-toggle" href="#sidr" class="chat-menu-toggle" >
-            <div class="">
-            <button class="btn btn-primary btn-cons right"  id="chat-menu-toggle" class="chat-menu-toggle" href="#sidr" type="button">
+             <button class="btn btn-primary btn-cons right"  id="chat-menu-toggle" class="chat-menu-toggle" href="#sidr" type="button">
             <i class="icon-plus"></i>
             Add New Attendee
             </button>
             </a>
-            </div>
             </div>
             </div>
             </div>
@@ -383,7 +397,7 @@
                 </thead>
                 <tbody>
                 <?php
-          $url = "http://192.168.1.242/Events_Management/public/index.php/api/exa/attendee/"; 
+          $url = "http://192.168.1.222/Event-Management/public/index.php/api/exa/attendee/"; 
 
           $ch = curl_init();
           curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -391,13 +405,17 @@
           curl_setopt($ch, CURLOPT_URL,$url);
           $result=curl_exec($ch);
           $data=json_decode($result, true);
+	  
+	 
           //print_r($data['Attendee']);
-		  if(isset($data['Attendee']) && $data['Attendee']!=''){
+	  if(isset($data['Attendee']) && $data['Attendee']!=''){
           foreach($data['Attendee'] as $value)
           {
-          //echo $value['SpeakerName'];                      
+	   
+	  //echo $value['SpeakerName'];                      
           ?>
-                  <tr class="odd gradeX">
+                  <tr class="odd gradeX" id="row-<?php echo $value['id'];  ?>">
+		    
                     <td><?php echo $value['first_name']; ?></td>
                     <td><?php echo $value['last_name']; ?></td>
                     <td><?php echo $value['company_name']; ?></td>
@@ -405,16 +423,19 @@
                     <td><?php echo $value['mobile_number']; ?></td>
                     <td><?php echo $value['job_title']; ?></td>
                     <td class="center">
+			
                      <a class="icon-plus-sign-alt"></a> &nbsp; 
-                     <!--<a href="http://192.168.1.242/Events_Management/public/index.php/api/exa/attendee/<?php //echo $value['id']; ?>/delete"  class="icon-trash"></a>-->
-                     <a href="#" onClick="attebdeedelete('<?php echo $value['id'];  ?>')" class="icon-trash"></a>
+                       <!-- <a onClick="attendeeedit('< ?php echo $value['id'];  ?>')" id="edit"> Edit</a>-->
+		       <a href="attendee_edit.php?id=<?php echo $value['id']; ?>"> Edit</a>
+	                <a  onClick="attebdeedelete('<?php echo $value['id'];  ?>')" class="icon-trash" ></a>
                      </td>
                   </tr>
-              <?php } }?>    
+              <?php } }
+	       ?>    
                     
                </tbody>
               </table>
-            </div>
+            
           </div>
           </div>
         </div>
@@ -428,8 +449,8 @@
   
 </div>
 <!-- END PAGE -->
-
 <!-- END CONTAINER -->
+
 <div id="sidr" class="sidr right rightSilder">
 
 <h6> Add New Attendee </h6>
@@ -443,14 +464,14 @@
                                     <div class="control-group">
                                       <label class="control-label"> first_name:   <span> * </span> </label>
                                       <div class="controls">
-                                        <input type="text" name="first_name" class="span12">
+                                        <input type="text" name="first_name" class="span12" value="">
                                       </div>
 									  </div>
 									
 									  <div class="control-group">
                                       <label class="control-label"> last_name:   <span> * </span> </label>
                                       <div class="controls">
-                                        <input type="text" name="last_name" class="span12">
+                                        <input type="text" name="last_name" class="span12"  value="">
                                       </div>
 									  </div>
 									
@@ -458,7 +479,7 @@
 									 <div class="control-group">
                                       <label class="control-label"> Email:   <span> * </span> </label>
                                       <div class="controls">
-                                        <input type="text" name="email" class="span12">
+                                        <input type="text" name="email" class="span12"  value="">
                                       </div>
 									  </div>
 									
@@ -468,7 +489,7 @@
                                 
                                       <label class="control-label"> mobile_number:    <span> * </span> </label>
                                       
-                                     <input type="text" class="span12" name="mobile_number">
+                                     <input type="text" class="span12" name="mobile_number"  value="">
                                     
 									  </div>
 									</div>
@@ -477,7 +498,7 @@
                                  
                                       <label class="control-label">  job_title:    <span> * </span> </label>
                                      
-                                      <input type="text" class="span12" name="job_title">
+                                      <input type="text" class="span12" name="job_title" value="">
                                     
 									  </div>
 									</div>
@@ -485,25 +506,30 @@
                                     <div class="control-group">
                                       <label class="control-label"> company_name:   <span> * </span> </label>
                                       <div class="controls">
-                                        <input type="text" name="company_name" class="span12">
+                                        <input type="text" name="company_name" class="span12" value="">
                                       </div>
 									  </div>
 									
-									
-									 <div class="control-group">
+				  <div class="control-group">
                                       <label class="control-label"> qr:   <span> * </span> </label>
                                       <div class="controls">
-                                       <input type="text" name="qr" class="span12">
+                                       <input type="text" name="qr" class="span12" value="">
                                       </div>
-									  </div>
+				  </div>
                                        <div class="control-group">
                                       <label class="control-label"> gender:   <span> * </span> </label>
                                       <div class="controls">
-                                        <input type="text" name="gender" class="span12">
-                                        <input type="hidden" name="photo" value="this is photo" class="span12">
-                                        <input type="hidden" name="event_id" value="1" class="span12">
+                                        <input type="text" name="gender" class="span12" value="">
+					    <input type="hidden" name="photo" value="this is photo" class="span12">
                                       </div>
 									  </div>
+				      
+				        <div class="control-group">
+                                      <label class="control-label"> event_id:   <span> * </span> </label>
+                                      <div class="controls">
+                                       <input type="text" name="event_id" value="1" class="span12">
+                                      </div>
+				  </div>
 							
                                 </div>
                               </div>
@@ -525,6 +551,7 @@
              </div>
            </form>
            </div>
+
 <!-- BEGIN CORE JS FRAMEWORK-->
 <script src="assets/plugins/jquery-1.8.3.min.js" type="text/javascript"></script>
 <script src="assets/plugins/jquery-ui/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
@@ -549,16 +576,10 @@
 <script src="assets/js/demo.js" type="text/javascript"></script>
 <!-- END CORE TEMPLATE JS -->
 <!-- END JAVASCRIPTS -->
-<script> 
 
-$(".delete").click(function(event){
-
-
-var value=$(event.currentTarget).attr("index");
-
-$("tr[index='"+value+"']").css("display","none");
-
-});
-</script> 
 </body>
 </html>
+
+
+   
+  

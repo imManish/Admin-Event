@@ -1,7 +1,8 @@
 <?php
-    $urltopost = "http://192.168.1.242/Events_Management/public/index.php/api/exa/attendee/add_attendee"; 
+    $urltopost = "http://192.168.1.222/Event-Management/public/index.php/api/exa/attendee/add_attendee"; 
     
     $array=$_POST;
+    
 
 //first_name=hgfhgf&last_name=hgfhgf&email=hfghgf&mobile_number=9826542311&job_title=gfhgfh&company_name=gfhgfh&photo=vcbf&event_id=1&qr=fcgf&gender=male
 					  
@@ -22,7 +23,8 @@
 	curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
 	$returndata = curl_exec ($ch);
     
-	header("location:Attendee.php")							
+	header("location:Attendee.php");
+	header("Refresh: 100;url='Attendee.php'");
  						
 	
 		
